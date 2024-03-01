@@ -11,6 +11,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
+
   async signUp(signUpDto: SignUpDto) {
     const { email, password } = signUpDto;
     const existingUser = await this.userService.findOne(email);
@@ -44,5 +45,9 @@ export class AuthService {
     const access_token = await this.jwtService.sign(jwtPayload);
 
     return { access_token };
+  }
+
+  getCurrentUser(email: string) {
+    return this.userService.findByEmail(email);
   }
 }
