@@ -32,7 +32,7 @@ export class UserService {
     return this.userModel.create(createUserDto);
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: mongoose.Schema.Types.ObjectId): Promise<User> {
     const isValidId = isValidObjectId(id);
     if (!isValidId) {
       throw new BadRequestException('Id is invalid');
