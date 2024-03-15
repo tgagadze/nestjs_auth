@@ -10,7 +10,10 @@ import {
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+
+@ApiTags('post')
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
@@ -19,8 +22,7 @@ export class PostController {
   create(@Body() createPostDto: CreatePostDto) {
     return this.postService.create(createPostDto);
   }
-  // /
-  // posts/?page=1&perPage=10
+ 
   @Get('posts/:page/:perPage')
   findAll() {
     return this.postService.findAll();
