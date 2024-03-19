@@ -11,7 +11,9 @@ import {
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -29,6 +31,7 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    console.log('id', id);
     return this.userService.findOne(id);
   }
 
