@@ -32,7 +32,7 @@ export class UserService {
     return this.userModel.create(createUserDto);
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: mongoose.Schema.Types.ObjectId): Promise<User> {
     const isValidId = isValidObjectId(id);
     if (!isValidId) {
       throw new BadRequestException('Id is invalid');
@@ -48,8 +48,8 @@ export class UserService {
     return this.userModel.find().populate('posts');
   }
 
-  findOne(email: string) {
-    return this.userModel.findOne({ email }).select(['email', 'password']);
+  findOne(id: string) {
+    return this.userModel.findById(id).select(['email']);
   }
 
   findByEmail(email: string) {
