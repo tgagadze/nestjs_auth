@@ -1,15 +1,18 @@
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
-import mongoose from 'mongoose';
 
+
+
+InputType()
 export class CreatePostDto {
+  @Field()
   @IsString()
   @IsNotEmpty()
   title: string;
-
+@Field()
   @IsString()
   @IsNotEmpty()
   content: string;
 
-  @IsMongoId()
-  user: mongoose.Schema.Types.ObjectId;
+  
 }

@@ -2,6 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { SignUpDto } from './dtos/sing-up.dto';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt'
+import { JwtService } from '@nestjs/jwt';
+import { SignInDto } from './dtos/sign-in-dto';
+import { SignuptPayload } from './dtos/sign-up-paiload';
+import { signUpInput } from './dtos/sign-up-args';
 
 
 @Injectable()
@@ -10,9 +14,9 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
-  async signUp(signUpDto: SignUpDto) {
+  async signUp(signUpDto: SignUpDto| signUpInput) : Promise <SignuptPayload> {
     const { email, password } = signUpDto;
-    const existingUser = await this.userService.findOne(email);
+    const existingUser = await this.userService.findByEmail;
     if(existingUser){
       throw new BadRequestException('user exzist')
     }
@@ -38,6 +42,7 @@ export class AuthService {
 
     const jwtPayload = {
       email,
+      _id: user.id,
     };
 
     const access_token = await this.jwtService.sign(jwtPayload);

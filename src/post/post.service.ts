@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Post } from './schemas/post.schema';
 import { Model } from 'mongoose';
 import { UserService } from 'src/user/user.service';
+import { CurrentUser } from 'src/user/current-user-decorator';
 
 @Injectable()
 export class PostService {
@@ -13,7 +14,7 @@ export class PostService {
     private readonly userService: UserService,
   ) {}
   async create(createPostDto: CreatePostDto) {
-    const user = await this.userService.findById(createPostDto.user);
+    const user = await this.userService.findById(currentUser._id);
     if (!user) {
       throw new BadRequestException('User not found');
     }
