@@ -1,12 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 
+@ObjectType()
 @Schema()
 export class User extends Document {
+  @Field((type) => ID)
+  _id?: mongoose.Schema.Types.ObjectId;
+
+  @Field({
+    nullable: true,
+    description: 'This is email field',
+    deprecationReason: 'Depricated',
+  })
   @Prop({ unique: true })
   email: string;
 
-  @Prop({ select: false })
+  @Prop()
   password: string;
 
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }])

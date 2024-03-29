@@ -4,6 +4,8 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { SignInDto } from './dtos/sign-in.dto';
 import { JwtService } from '@nestjs/jwt';
+import { SignUpInput } from './dtos/sign-up.args';
+import { SignUpPayload } from './dtos/sign-up-payload.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,9 +14,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto) {
+  async signUp(signUpDto: SignUpDto | SignUpInput): Promise<SignUpPayload> {
     const { email, password } = signUpDto;
-    const existingUser = await this.userService.findOne(email);
+    const existingUser = await this.userService.findByEmail(email);
     if (existingUser) {
       throw new BadRequestException('User already exists');
     }
@@ -27,7 +29,8 @@ export class AuthService {
 
   async signIn(signInDto: SignInDto) {
     const { email, password } = signInDto;
-    const user = await this.userService.findOne(email);
+    const user = await this.userService.findByEmail(email);
+    console.log('user', user);
     if (!user) {
       throw new BadRequestException('Invalid credentials');
     }
@@ -40,6 +43,7 @@ export class AuthService {
 
     const jwtPayload = {
       email,
+      _id: user.id,
     };
 
     const access_token = await this.jwtService.sign(jwtPayload);

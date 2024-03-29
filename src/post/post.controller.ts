@@ -19,7 +19,7 @@ export class PostController {
 
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto);
+    // return this.postService.create(createPostDto);
   }
   // /
   // posts/?page=1&perPage=10

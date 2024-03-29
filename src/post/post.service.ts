@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Post } from './schemas/post.schema';
 import { Model } from 'mongoose';
 import { UserService } from 'src/user/user.service';
+import { User } from 'src/user/schemas/user.schema';
 
 @Injectable()
 export class PostService {
@@ -12,13 +13,17 @@ export class PostService {
     @InjectModel(Post.name) private readonly postModel: Model<Post>,
     private readonly userService: UserService,
   ) {}
-  async create(createPostDto: CreatePostDto) {
-    const user = await this.userService.findById(createPostDto.user);
+  async create(createPostDto: CreatePostDto, currentUser: User) {
+    const user = await this.userService.findById(currentUser._id);
+
     if (!user) {
       throw new BadRequestException('User not found');
     }
 
-    const post = await this.postModel.create(createPostDto);
+    const post = await this.postModel.create({
+      ...createPostDto,
+      user: user._id,
+    });
 
     this.userService.addPost(user._id, post._id);
 
@@ -26,7 +31,7 @@ export class PostService {
   }
 
   findAll() {
-    return this.postModel.find().populate('user');
+    return this.postModel.find();
   }
 
   findOne(id: number) {

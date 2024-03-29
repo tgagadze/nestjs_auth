@@ -1,0 +1,47 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  _id: ID!
+
+  """This is email field"""
+  email: String @deprecated(reason: "Depricated")
+}
+
+type Post {
+  _id: ID!
+  title: String
+  content: String!
+  user: User!
+}
+
+type SignUpPayload {
+  success: Boolean!
+  message: String!
+}
+
+type SignInPayload {
+  access_token: String!
+}
+
+type Query {
+  getPosts: [Post!]!
+  me: User!
+}
+
+type Mutation {
+  createPost(post: CreatePostDto!): Post!
+  signUp(signUp: SignUpInput!): SignUpPayload!
+  signIn(signIn: SignUpInput!): SignInPayload!
+}
+
+input CreatePostDto {
+  title: String!
+  content: String!
+}
+
+input SignUpInput {
+  email: String
+  password: String!
+}

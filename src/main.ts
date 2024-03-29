@@ -4,9 +4,11 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
+  console.log('bootstrap...');
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
 
+  console.log('hi');
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Test app')
     .setDescription('Test description')
